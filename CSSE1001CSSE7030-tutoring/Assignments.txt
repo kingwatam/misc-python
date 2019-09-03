@@ -1,0 +1,30 @@
+ Assignment 1. Support files: assign1.py, todo.txt. A test program: assign1_sample_tests.py.
+
+Assignment 1 solution: assign1_soln.py
+
+Assignment 2. Download assign2.py.
+A test program: sample_tests.py
+A 'bad' todo file: bad_todo1.txt
+A 'bad' todo file: bad_todo2.txt
+A todo file: todo.txt
+A todo file: todo-fishing.txt
+A snapshot of the tool when started: start.png
+A snapshot of the tool when file opened: open.png
+A snapshot of the tool when item is being added: start.png
+A snapshot of the tool with an example of an error when entering a new item: error.png
+A snapshot of the tool with an example of the unsaved message box: unsaved.png
+A screencast: demo.ogv. For Windows users, Windows Media Player does not cope with this file type. I suggest you download VLC media player for Windows. This media player deals with a much wider range of media types than Windows Media Player.
+
+Assignment 3.
+Other files:
+
+    A rough template for your design document: design_template.pdf
+    Some hints on how to approach the assignment - it's very important that you read this: a3_recommendations.pdf
+    Six examples of previous projects - these were considered very high quality projects:
+        circuit.zip
+        PyWire.zip
+        bandsaw.zip
+        POLYOMINOHS.zip
+        rubikcube.zip
+        PrinBash.zip
+

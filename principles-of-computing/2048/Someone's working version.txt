@@ -1,0 +1,218 @@
+"""
+Clone of 2048 game.
+"""
+
+import poc_2048_gui
+from random import randint
+import random
+
+# Directions, DO NOT MODIFY
+UP = 1
+DOWN = 2
+LEFT = 3
+RIGHT = 4
+
+# Offsets for computing tile indices in each direction.
+# DO NOT MODIFY this dictionary.   
+OFFSETS = {UP: (1, 0),
+           DOWN: (-1, 0),
+           LEFT: (0, 1),
+           RIGHT: (0, -1)}
+  
+def merge(line):
+    """
+    Get the width of the board.
+    """
+    # replace with your code
+    result = clean1(line)
+   
+    for dummy_i in range(len(line)):
+        if (result[dummy_i] != 0 and dummy_i <= len(line) - 2):
+            if( result[dummy_i] == result[dummy_i+1] ):
+                result[dummy_i] = result[dummy_i] + result[dummy_i+1]
+                result[dummy_i+1] = 0
+                dummy_i = dummy_i + 1
+    return clean1(result)
+
+def clean1(line):
+    """
+    Get the width of the board.
+    """
+    # replace with your code
+    result = []
+   
+    for dummy_i in range(len(line)):
+        result.append(0)
+    position = 0
+   
+    for dummy_i in range(len(line)):
+        if( line[dummy_i] != 0 ):
+            result[position] = line[dummy_i]
+            position = position + 1
+    return result
+
+class TwentyFortyEight:
+    """
+    Class to run the game logic.
+    """
+
+    def __init__(self, grid_height, grid_width):
+        # replace with your code
+        self.grid_height = grid_height
+        self.grid_width = grid_width
+        self.grid = []
+        self.reset()
+       
+        list_up = [[0,dummy_x] for dummy_x in xrange(self.grid_width)]
+        list_down = [[self.grid_height-1, dummy_x] for dummy_x in xrange(self.grid_width)]
+        list_right = [[dummy_x, self.grid_width-1] for dummy_x in xrange(self.grid_height)]
+        list_left = [[dummy_x,0] for dummy_x in xrange(self.grid_height)]
+       
+        self.computed = {
+           UP: list_up,
+           DOWN: list_down,
+           LEFT: list_left,
+           RIGHT: list_right
+        }
+   
+    def reset(self):
+        """
+        Get the height of the board.
+        """
+        # replace with your code
+        self.grid = [ [0 for dummy_col in range(self.grid_width)] for dummy_row in range(self.grid_height)]
+       
+    def __str__(self):
+        print self.grid
+
+    def get_grid_height(self):
+        """
+        Get the height of the board.
+        """
+        # replace with your code
+        return self.grid_height
+   
+    def get_grid_width(self):
+        """
+        Get the width of the board.
+        """
+        # replace with your code
+        return self.grid_width
+                           
+    def move(self, direction):
+        """
+        Move all tiles in the given direction and add
+        a new tile if any tiles moved.
+        """
+        # replace with your code
+       
+        list = self.computed[direction]
+        temp_list = []
+       
+        if(direction == UP):
+           
+            self.action_move_col(list, direction, temp_list)
+                   
+            self.new_tile()
+           
+        elif(direction == DOWN):
+           
+            self.action_move_col(list, direction, temp_list)
+           
+            self.new_tile()
+           
+        elif(direction == LEFT):
+
+            self.action_move_row(list, direction, temp_list)
+           
+            self.new_tile()
+           
+        elif(direction == RIGHT):
+
+            self.action_move_row(list, direction, temp_list)
+           
+            self.new_tile()
+           
+    def action_move_col(self, list, direction, temp_list):
+        """
+        Move of columns of the matrix.
+        """
+        # replace with your code
+        for dummy_x in list:
+                temp_list.append(dummy_x)
+               
+                # Create the indices
+                for dummy_i in range(1, self.grid_height):
+                    temp_list.append(self.sum(temp_list[-1], OFFSETS[direction]))
+               
+                value_indices = []               
+                for dummy_indices in temp_list:
+                    value_indices.append(self.get_tile(dummy_indices[0], dummy_indices[1]))
+                dummy_merged_list = merge(value_indices)
+                for dummy_i, dummy_j in zip(dummy_merged_list, temp_list):
+                    self.set_tile(dummy_j[0],dummy_j[1],dummy_i)
+                temp_list = []
+               
+    def action_move_row(self, list, direction, temp_list):
+        """
+        Move the rows of the matrix.
+        """
+        # replace with your code
+        for dummy_x in list:
+            temp_list.append(dummy_x)
+               
+            # Create the indices
+            for dummy_i in range(1, self.grid_width):
+                temp_list.append(self.sum(temp_list[-1], OFFSETS[direction]))
+               
+            value_indices = []               
+            for dummy_indices in temp_list:
+                value_indices.append(self.get_tile(dummy_indices[0], dummy_indices[1]))
+            dummy_merged_list = merge(value_indices)
+            for dummy_i, dummy_j in zip(dummy_merged_list, temp_list):
+                self.set_tile(dummy_j[0],dummy_j[1],dummy_i)
+                   
+            temp_list = []
+   
+    def sum(self, list1, list2):
+        """
+        Get the width of the board.
+        """
+        # replace with your code
+        return [x + y for x, y in zip(list1, list2)]
+       
+    def new_tile(self):
+        """
+        Get the width of the board.
+        """
+        # replace with your code
+        avaliable_positions = []
+        for row in range(self.grid_height):
+            for col in range(self.grid_width):
+                if self.grid[row][col] == 0:
+                    zero_tile = [row, col]
+                    avaliable_positions.append(zero_tile)
+
+        if not avaliable_positions:
+            print "Empty"
+        else:
+            random_tile = random.choice(avaliable_positions)
+
+            tile = random.choice([2,2,2,2,2,2,2,2,4])
+            self.set_tile(random_tile[0],random_tile[1], tile)
+   
+    def set_tile(self, row, col, value):
+        """
+        Set the tile at position row, col to have the given value.
+        """       
+        # replace with your code
+        self.grid[row][col] = value
+
+    def get_tile(self, row, col):
+        """
+        Return the value of the tile at position row, col.
+        """       
+        # replace with your code
+        return self.grid[row][col]
+   
+poc_2048_gui.run_gui(TwentyFortyEight(4, 4))

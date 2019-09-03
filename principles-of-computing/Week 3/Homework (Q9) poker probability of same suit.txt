@@ -1,0 +1,10 @@
+Method 1:
+12/51 * 11/50 * 10/49 * 9/48
+
+Method 2:
+m = outcomes
+n = sequence length
+permutations = m!/(m-n)!
+combinations = m!/(m-n)!n!
+(13!/(13-5)!5!)*4 = possible combinations of 5 cards having the same suit
+52!/(52-5)!5! = possible combinations of 5 cards

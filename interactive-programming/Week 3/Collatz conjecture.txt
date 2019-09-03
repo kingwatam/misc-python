@@ -1,0 +1,25 @@
+import simplegui
+
+# global state
+number = 23
+print number
+
+# timer callback
+
+def update():
+    """Collatz conjecture"""
+    global  number
+
+    if number > 1 and number % 2 == 0:
+        number /= 2
+        print number
+    elif number > 1 and number % 2 != 0:
+        number = number*3+1
+        print number
+
+# register event handlers
+
+timer = simplegui.create_timer(300, update)
+
+# start program
+timer.start()

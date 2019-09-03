@@ -1,0 +1,13 @@
+def insertion_sort(list_temp):
+    """ sorting numbers in a list, my own version
+    """
+    for dummy_i in range(1,len(list_temp)):
+        val = list_temp[dummy_i]
+        item = list_temp[dummy_i]
+        dummy_j = dummy_i
+        while dummy_j > 0 and list_temp[dummy_j-1] > val:
+            list_temp[dummy_j] = list_temp[dummy_j-1]
+            dummy_j -= 1
+        list_temp[dummy_j] = item
+    return list_temp
+

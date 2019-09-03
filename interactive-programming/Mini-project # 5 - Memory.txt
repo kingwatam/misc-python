@@ -1,0 +1,68 @@
+# implementation of card game - Memory
+# http://www.codeskulptor.org/#user24_q8jZjvSYHzT1bLg.py
+
+import simplegui
+import random
+
+# helper function to initialize globals
+def new_game():
+    global deck, exposed, state, paired, counter
+    deck = range(8) + range(8)
+    random.shuffle(deck)
+    exposed = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+    state = 0
+    paired = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+    counter = 0
+    
+# define event handlers
+def mouseclick(pos):
+    global state, card_one, card_two, paired, counter
+    index = pos[0] // 50
+    if not exposed[index]:
+        if state == 0:
+            exposed[index] = True
+            state = 1
+            card_one = index
+        elif state == 1:
+            exposed[index] = True
+            state = 2
+            counter += 1
+            card_two = index
+        else:        
+            if deck[card_one] == deck[card_two]:
+                paired[card_one] = True
+                paired[card_two] = True
+            else: 
+                exposed[card_one] = False
+                exposed[card_two] = False
+            if paired[index] == False:
+                exposed[index] = True
+                state = 1
+                card_one = index
+        
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    label.set_text("Turns = " + str(counter))
+    card_width = 800/16
+    for index in range(len(deck)):
+        if exposed[index]:
+            canvas.draw_text(str(deck[index]),[card_width-800/16+10,60], 50, "White")
+        else:
+            canvas.draw_polygon([[card_width-800/16, 0], [card_width, 0], [card_width, 100], [card_width-800/16, 100]], 3, "Brown", "Green")
+        card_width += 800/16
+
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", 800, 100)
+frame.add_button("Restart", new_game)
+label = frame.add_label("Turns = 0")
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+# get things rolling
+new_game()
+frame.start()
+
+
+# Always remember to review the grading rubric

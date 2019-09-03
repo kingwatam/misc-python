@@ -1,0 +1,13 @@
+#http://www.codeskulptor.org/#user22_nnPbihV7tV_0.py
+
+x = "1lll1l1l1l1ll1l111ll1l1ll1l1ll1ll111ll1ll1ll1l1ll1ll1ll1ll1lll1l1l1l1l1l1l1l1l1l1l1l1ll1lll1l111ll1l1l1l1l1"
+
+
+print len(x)
+
+print x.upper()
+text = ""
+for i in range(len(x)):     
+    if not x[i].isdigit():
+        text += x[i]
+print len(text)

@@ -1,0 +1,201 @@
+# Count out the Money
+# http://www.codeskulptor.org/#user31_NSNKso5FwTY5iOw.py
+import simplegui
+import random
+import codeskulptor
+
+# load sprites
+hundred_note = simplegui.load_image("http://i.imgur.com/8YcE0Sg.png")
+fifty_note = simplegui.load_image("http://i.imgur.com/DnVkPo3.png")    
+twenty_note = simplegui.load_image("http://i.imgur.com/kC7XOyx.png")
+ten_note = simplegui.load_image("http://i.imgur.com/ur81erS.png")
+five_note = simplegui.load_image("http://i.imgur.com/YUHPnxe.png")
+two_coin = simplegui.load_image("http://i.imgur.com/xwkwK15.png")
+one_coin = simplegui.load_image("http://i.imgur.com/SMRHN6b.png")
+fifty_cents = simplegui.load_image("http://i.imgur.com/8xRKOtD.png")
+twenty_cents = simplegui.load_image("http://i.imgur.com/X34im5i.png")
+ten_cents = simplegui.load_image("http://i.imgur.com/AXvfjK4.png")
+five_cents = simplegui.load_image("http://i.imgur.com/72Yh1g7.png")
+
+# initialize some useful global variables
+screen_width = 1280		
+screen_height = 800
+count_out = 0
+my_count = 0
+cents = 0
+score_correct = 0
+score_incorrect = 0
+accuracy = 100
+dollar = 0
+choice = 100
+
+# define Timer global variables
+counter = 0
+tenths_of_seconds = 0
+seconds = 0
+tens_of_seconds = 0
+minutes = 0
+interval = 100
+
+def format(t):
+    global tenths_of_seconds, seconds, tens_of_seconds, minutes
+    tenths_of_seconds = t % 10
+    seconds = (t // 10) % 10
+    tens_of_seconds = (t // 100) % 6
+    minutes = t // 600
+    return str(minutes) + str(":") +  str(tens_of_seconds) + str(seconds) + str(".") + str(tenths_of_seconds)
+def start_button():
+    timer.start()    
+def stop_button():
+    # only stop timer if time is running
+    while timer.is_running():        
+        timer.stop()
+           
+def reset_button():
+    global counter
+    timer.stop()
+    counter = 0
+def tick():
+    global counter
+    counter += 1
+def times_up():
+    if counter >= 3000: # 5 minutes 
+        failure_sound.play()
+        stop_button()
+
+def initial_values():
+    global count_out, my_count, score_correct, score_incorrect
+    count_out = 0
+    my_count = 0
+    score_correct = 0
+    score_incorrect = 0
+    if choice == 100:
+        range100()
+    else:
+        range1000()    
+
+def range100():
+    global dollar, choice, count_out, my_count
+    choice = 100
+    count_out = 0
+    my_count = 0    
+#    dollar = random.randrange(0, 10)+random.randrange(0, 10)*10
+    dollar = random.randrange(0, 100)
+    gen()
+def range1000():
+    global dollar, choice, count_out, my_count
+    choice = 1000
+    count_out = 0
+    my_count = 0
+#    dollar = random.randrange(0, 10)+random.randrange(0, 10)*10+random.randrange(0, 10)*100
+    dollar = random.choice([random.randrange(0, 1000),random.randrange(0, 100),random.randrange(0, 100)])
+    gen()
+
+# currency random generator
+def gen():
+    global count_out, cents, dollar 
+    cents = random.randrange(0, 100)
+    if cents % 5 != 0: # not divisible by 5
+        cents = cents - cents%5        
+    count_out = dollar + cents/100.00
+      
+# draw
+def draw(canvas):
+    global count_out, counter
+    canvas.draw_image(hundred_note, (142/2,243/2), (142,243), (250/2,250/2), (142,243))
+    canvas.draw_image(fifty_note, (134/2,243/2), (134,243), (250/2+250,250/2), (134,243))
+    canvas.draw_image(twenty_note, (140/2,244/2), (140,244), (250/2+250*2, 250/2), (140,244))
+    canvas.draw_image(ten_note, (132/2,241/2), (132,241), (250/2+250*3,250/2), (132,241))
+    canvas.draw_image(five_note, (138/2,241/2), (138,241), (250/2+250*4,250/2), (138,241))
+    canvas.draw_image(two_coin, (223/2,117/2), (223,117), (250/2,250/2+250), (223,117))
+    canvas.draw_image(one_coin, (223/2,117/2), (223,117), (250/2+250,250/2+250), (223,117))
+    canvas.draw_image(fifty_cents, (230/2,119/2), (230,119), (250/2+250*2,250/2+250), (230,119))
+    canvas.draw_image(twenty_cents, (222/2,124/2), (222,124), (250/2,250/2+250*2), (222,124))
+    canvas.draw_image(ten_cents, (220/2,120/2), (220,120), (250/2+250,250/2+250*2), (220,120))
+    canvas.draw_image(five_cents, (220/2,120/2), (220,120), (250/2+250*2,250/2+250*2), (220,120))
+
+    canvas.draw_text("Count out: ", [250/2+250*3,250/2+250*1], 48, "Orange")
+    canvas.draw_text(str(count_out), [250/2+250*3+250,250/2+250*1], 48, "White")
+    canvas.draw_text("I've got: ", [250/2+250*3,250/2+250*2], 25, "Orange")
+    canvas.draw_text(str(my_count), [250/2+250*3+250,250/2+250*2], 25, "White")
+    canvas.draw_text("Correct: " + str(score_correct), [250/2+250*1,250/2+250*2.5], 25, "White")
+    canvas.draw_text("Incorrect: " + str(score_incorrect), [250/2+250*2,250/2+250*2.5], 25, "White")
+    canvas.draw_text("Accuracy: " + str(accuracy) + "%", [250/2+250*3,250/2+250*2.5], 25, "White")
+    update()
+    canvas.draw_text(format(counter), [250/2,250/2+250*2.5], 48, "Red")
+    times_up()
+# mouse click handler
+def mouseclick(pos):
+    global my_count
+    index_height = pos[1] // 250    
+    index_width = pos[0] // 250
+    if index_height == 0:
+        if index_width == 0:
+            my_count += 100
+        elif index_width == 1:
+            my_count += 50
+        elif index_width == 2:
+            my_count += 20
+        elif index_width == 3:
+            my_count += 10
+        elif index_width == 4:
+            my_count += 5
+    if index_height == 1:
+        if index_width == 0:
+            my_count += 2
+        elif index_width == 1:
+            my_count += 1
+        elif index_width == 2:
+            my_count += 0.5
+    if index_height == 2:
+        if index_width == 0:
+            my_count += 0.2
+        elif index_width == 1:
+            my_count += 0.1
+        elif index_width == 2:
+            my_count += 0.05
+
+        
+# update score
+def update():
+    global count_out, score_correct, score_incorrect, accuracy, choice
+    if my_count <= count_out:
+        if my_count == count_out:
+            score_correct += 1
+            if choice == 100:
+                range100()
+            else:
+                range1000()
+          
+    else:
+        score_incorrect += 1
+        if choice == 100:
+            range100()
+        else:
+            range1000()
+            
+    if (score_correct+score_incorrect) > 0:
+        accuracy = float(score_correct)/(score_correct+score_incorrect)*100
+
+
+# initialization frame and buttons
+frame = simplegui.create_frame("Money Counting", screen_width, screen_height)
+frame.set_canvas_background("Black")
+frame.add_button("Range: [0 - 100)", range100)
+frame.add_button("Range: [0 - 1000)", range1000)
+frame.add_button("Reset scores", initial_values)
+frame.add_button("Start timer", start_button)
+frame.add_button("Pause timer", stop_button)
+frame.add_button("Reset timer", reset_button)
+
+# handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+timer = simplegui.create_timer(interval, tick)
+
+# audio
+failure_sound = simplegui.load_sound("http://www.freesound.org/data/previews/146/146731_2437358-lq.mp3")#game fail by fins
+
+# get things rolling
+frame.start()
+range100()

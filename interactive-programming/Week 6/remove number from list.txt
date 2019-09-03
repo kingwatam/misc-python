@@ -1,0 +1,42 @@
+#Initialize n to be 1000. Initialize numbers to be a list of numbers from 2 to n, but not including n.
+#With results starting as the empty list, repeat the following as long as numbers contains any numbers.
+#  Add the first number in numbers to the end of results.
+#  Remove every number in numbers that is evenly divisible by (has no remainder when divided by) the number that you had just added to results.
+#
+#How long is results? 
+
+
+import codeskulptor
+codeskulptor.set_timeout(1000)
+n = 1000
+i = 2
+numbers = []
+result = []
+while i < n:
+    numbers.extend([i])
+    i += 1
+remove = []
+counter = 0
+while len(numbers) > 0:
+    result.extend([numbers[0]])
+    for number in numbers:
+        if number % numbers[0] == 0:
+            remove.extend([number])
+    for number in remove:
+        if number in numbers:
+            numbers.remove(number)
+
+print len(numbers)
+print len(result)
+
+
+# model answer
+n = 1000
+numbers = range(2, n)
+results = []
+
+while numbers != []:
+    results.append(numbers[0])
+    numbers = [n for n in numbers if n % numbers[0] != 0]
+
+print len(results)
