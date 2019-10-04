@@ -1,2 +1,2 @@
 # misc-python
-Miscellaneous Python scripts
+Miscellaneous Python programs/scripts
